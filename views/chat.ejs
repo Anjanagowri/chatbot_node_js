@@ -1,0 +1,180 @@
+<html>
+<head>
+<style>
+body, html {
+  height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.bg-img {
+  /* The image used */
+  background-image: url("");
+   position:float;
+  height: 100%;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+}
+
+/* Add styles to the form container */
+.container {
+  position: fixed;
+  right: 10px
+  bottom:10px;
+  margin: 40px;
+  max-width: 600px;
+  padding: 16px;
+  background-color: blue;
+}
+
+/* Full-width input fields */
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  border: none;
+  background: #f1f1f1;
+}
+
+input[type=text]:focus, input[type=password]:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+/* Set a style for the submit button */
+.btn {
+  background-color: #3150CB;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  width: 50%;
+  opacity: 0.9;
+}
+
+.btn:hover {
+  opacity: 1;
+}
+.left
+{
+text-align: left;
+}
+.right
+{
+text-align: right;
+}
+.right1
+{
+text-align: right;
+}
+.left1
+{
+text-align: right;
+}
+
+.row {
+
+  position:fixed;
+ right:10px;
+ bottom: 10px ;
+}
+
+</style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script>
+function Welcome()
+{
+
+   var para = document.createElement("p");
+   var node = document.createTextNode("ALEX:Hi,Give your email id");
+   para.className='left';
+   para.appendChild(node);
+   var element = document.getElementById("his");
+   element.appendChild(para);
+
+  }
+  function func()
+  {
+    var keyword=sessionStorage.getItem('keyword');
+  var name=document.getElementById("text").value;
+  var json = {
+      "name":name,
+       "keyword":keyword
+
+  };
+    document.getElementById("text").value=""
+  var myVar=JSON.stringify(json);
+  $.ajax({
+    type: 'POST',
+    url: '/chat',
+    data: json,
+    dataType: 'json',
+
+    success: function(data){
+
+    var reply=data.status;
+    var keyword=data.keyword;
+    sessionStorage.setItem('keyword',keyword);
+
+    var para = document.createElement("p");
+   var node = document.createTextNode("YOU:"+name);
+   para.className='right';
+   para.appendChild(node);
+   var element = document.getElementById("ok");
+   element.appendChild(para);
+
+   var para1 = document.createElement("p");
+   var node1 = document.createTextNode("ALEX:"+reply);
+        para1.className='left';
+   para1.appendChild(node1);
+        if(typeof data.link!='undefined'){
+
+           var node2 = document.createTextNode("For More:");
+
+ var br = document.createElement("br");
+          var a = document.createElement("a");
+          a.setAttribute('href',data.link);
+          a.setAttribute('target','_blank');
+          a.appendChild(document.createTextNode(data.link));
+            para1.appendChild(br);
+              para1.appendChild(node2);
+
+          para1.appendChild(a);
+        }
+
+   element.appendChild(para1);
+        //  window.location("bot.ejs");
+    },
+    error: function(error){
+      console.log(error);
+     prompt("Error");
+   }
+  });
+  return false;
+ }
+</script>
+</head>
+
+<body onload="Welcome()" class="bg-img">
+  <div class="row">
+    <a href="http://localhost:3000/chat">
+    <img src="http://localhost:3000/public/images/tenor.gif", height = 50 width = 50/></a>
+  </div>
+<div class="container">
+ <h1 align="center">WELCOME TO ALEX</h1>
+ <div id="his"></div>
+<div id="ok"></div>
+ <p align="center">ENTER MESSAGE</h2>
+<input type="text" name="text" id="text">
+ <button onclick="func();">Submit</button>
+</div>
+</body>
+</html>
